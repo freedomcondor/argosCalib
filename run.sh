@@ -1,3 +1,5 @@
+cd argos3-dev
+
 argosBuildDir="build"
 
 #this if may not be necessary
@@ -10,5 +12,5 @@ fi
 #$argosBuildDir/core/argos3 -c experiment_surround.argos
 #$argosBuildDir/core/argos3 -c experiment_connection.argos
 $argosBuildDir/core/argos3 -c src/testing/test_builderbot.argos
-			
 
+cd ..
