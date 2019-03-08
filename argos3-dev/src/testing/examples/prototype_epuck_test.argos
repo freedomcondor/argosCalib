@@ -1,0 +1,126 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+  <!-- ************************* -->
+  <!-- * General configuration * -->
+  <!-- ************************* -->
+  <framework>
+    <experiment length="0" ticks_per_second="25" random_seed="0"/>
+  </framework>
+
+  <!-- *************** -->
+  <!-- * Controllers * -->
+  <!-- *************** -->
+  <controllers>
+    <lua_controller id="vehicle_controller">
+      <actuators>
+        <joints implementation="default">
+          <joint id="base_wheel_left" mode="velocity" max_impulse="0.005"/>
+          <joint id="base_wheel_right" mode="velocity" max_impulse="0.005"/>
+        </joints>
+        <leds implementation="default" medium="leds"/>
+      </actuators>
+      <sensors>
+        <joints implementation="default">
+          <joint id="base_wheel_left" mode="velocity"/>
+          <joint id="base_wheel_right" mode="velocity"/>
+        </joints>
+      </sensors>
+      <params script="src/testing/examples/prototype_epuck_test.lua"/>
+    </lua_controller>
+
+  </controllers>
+
+  <!-- *********************** -->
+  <!-- * Arena configuration * -->
+  <!-- *********************** -->
+  <arena size="0.5, 0.5, 0.5" center="0, 0, 0.25">
+    <box id="bn" size="0.025,0.475,0.025" movable="false" mass="10">
+      <body position="0.2375,0.0125,0"  orientation="0,0,0" />
+    </box>
+    <box id="be" size="0.475,0.025,0.025" movable="false" mass="10">
+      <body position="0.0125,-0.2375,0"  orientation="0,0,0" />
+    </box>
+    <box id="bs" size="0.025,0.475,0.025" movable="false" mass="10">
+      <body position="-0.2375,-0.0125,0"  orientation="0,0,0" />
+    </box>
+    <box id="bw" size="0.475,0.025,0.025" movable="false" mass="10">
+      <body position="-0.0125,0.2375,0"  orientation="0,0,0" />
+    </box>
+
+    <prototype id="epuck" movable="true">
+      <body position="0,0,0" orientation="0,0,0" />
+      <controller config="vehicle_controller"/>
+      <links ref="epuck_base">
+        <link id="epuck_base" geometry="cylinder" radius="0.03625" height="0.0472" mass="0.145"
+              position="0,0,0.0012" orientation="0,0,0" />
+        <link id="epuck_wheel_left" geometry="cylinder" radius="0.0213" height="0.0026"
+              mass="0.0025" position="0,0.0251,0.0213" orientation="0,0,-90" />
+        <link id="epuck_wheel_right" geometry="cylinder" radius="0.0213" height="0.0026"
+              mass="0.0025" position="0,-0.0251,0.0213" orientation="0,0,90" />
+      </links>
+      <joints>
+        <joint id="base_wheel_right" type="revolute" axis="0,0,1">
+          <parent link="epuck_base" position="0,-.0251,0.0201" orientation="0,0,90"/>
+          <child link="epuck_wheel_right" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+        <joint id="base_wheel_left" type="revolute" axis="0,0,1">
+          <parent link="epuck_base" position="0,.0251,0.0201" orientation="0,0,-90"/>
+          <child link="epuck_wheel_left" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+      </joints>
+      <devices>
+        <leds medium="leds">
+          <led color="black" anchor="epuck_base" offset="0.0365,0.0000,0.0375"/>
+          <led color="black" anchor="epuck_base" offset="0.0258,0.0258,0.0375"/>
+          <led color="black" anchor="epuck_base" offset="0.0000,0.0365,0.0375"/>
+          <led color="black" anchor="epuck_base" offset="-0.0258,0.0258,0.0375"/>
+          <led color="black" anchor="epuck_base" offset="-0.0365,0.0000,0.0375"/>
+          <led color="black" anchor="epuck_base" offset="-0.0258,-0.0258,0.0375"/>
+          <led color="black" anchor="epuck_base" offset="0.0000,-0.0365,0.0375"/>
+          <led color="black" anchor="epuck_base" offset="0.0258,-0.0258,0.0375"/>
+        </leds>
+      </devices>
+    </prototype>
+
+  </arena>
+
+
+
+
+  <!-- ******************* -->
+  <!-- * Physics engines * -->
+  <!-- ******************* -->
+  <physics_engines>
+    <dynamics3d id="dyn3d" iterations="20">
+      <floor height="0.01"/>
+      <gravity g="1" />
+    </dynamics3d>
+  </physics_engines>
+
+  <!-- ********* -->
+  <!-- * Media * -->
+  <!-- ********* -->
+  <media>
+    <led id="leds" index="grid" grid_size="20,20,20" />
+  </media>
+  <!-- ****************** -->
+  <!-- * Visualization * -->
+  <!-- ****************** -->
+  <visualization>
+    <qt-opengl lua_editor="false">
+      <camera>
+        <placement idx="0" position=" 0,   -1.25,0.5" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="1" position=" 1.25,-1.25,0.6" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="2" position=" 1.25, 0,   0.5" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="3" position=" 1.25, 1.25,0.6" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="4" position=" 0,    1.25,0.5" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="5" position="-1.25, 1.25,0.6" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="6" position="-1.25, 0,   0.5" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="7" position="-1.25,-1.25,0.6" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="8" position="0,0,0.5" look_at="0.0,0.0,0.125" up="1,0,0" lens_focal_length="40"/>
+      </camera>
+    </qt-opengl>
+  </visualization>
+
+</argos-configuration>

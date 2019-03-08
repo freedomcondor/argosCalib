@@ -1,0 +1,258 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+  <!-- ************************* -->
+  <!-- * General configuration * -->
+  <!-- ************************* -->
+  <framework>
+    <experiment length="0" ticks_per_second="20" random_seed="1"/>
+  </framework>
+
+  <!-- *************** -->
+  <!-- * Controllers * -->
+  <!-- *************** -->
+  <controllers>
+    <lua_controller id="ar_controller">
+      <actuators>
+        <joints implementation="default">
+          <joint id="lower_chassis_wheel_fr" mode="velocity" max_impulse="0.005"/>
+          <joint id="lower_chassis_wheel_fl" mode="velocity" max_impulse="0.005"/>
+          <joint id="lower_chassis_wheel_br" mode="velocity" max_impulse="0.005"/>
+          <joint id="lower_chassis_wheel_bl" mode="velocity" max_impulse="0.005"/>
+          <joint id="lift_fixture_vertical_link" mode="velocity" max_impulse="0.1"/>
+        </joints>
+        <magnets implementation="default"/>
+        <radios implementation="default"/>
+      </actuators>
+      <sensors>
+        <cameras implementation="default" show_frustum="false">
+          <camera id="ov5460" range="0.05:0.50" resolution="640,360"
+                  anchor="vertical_link" position="0.056500,0,0.09528" orientation="-90,135,0"
+                  focal_length="883.961,883.961" principal_point="319.5,179.5">
+            <directional_led_detector medium="directional_leds" show_rays="false"/>
+            <tag_detector medium="apriltags" show_rays="false"/>
+          </camera>
+        </cameras>
+        <joints implementation="default">
+          <joint id="lift_fixture_vertical_link" mode="position"/>
+        </joints>
+        <proximity implementation="default" show_rays="false"/>
+        <radios implementation="default"/>
+      </sensors>
+      <!--params script="../../src/testing/examples/prototype_srocs_system_sbcontrol.lua"/-->
+      <params script="src/testing/examples/prototype_srocs_system_arcontrol.lua"/>
+    </lua_controller>
+    <lua_controller id="sb_controller">
+      <actuators>
+         <directional_leds implementation="default"/>
+      </actuators>
+      <sensors>
+        <radios implementation="default"/>
+      </sensors>
+      <!--params script="../../src/testing/examples/prototype_srocs_system_sbcontrol.lua"/-->
+      <params script="src/testing/examples/prototype_srocs_system_sbcontrol.lua"/>
+    </lua_controller>
+
+  </controllers>
+
+  <!-- *********************** -->
+  <!-- * Arena configuration * -->
+  <!-- *********************** -->
+  <!--arena size="1, 1, 0.5" center="0, 0, 0.125">
+    <box id="bn" size="0.025,0.975,0.05" movable="false" mass="10">
+      <body position="0.4875,0.0125,0"  orientation="0,0,0" />
+    </box>
+    <box id="be" size="0.975,0.025,0.05" movable="false" mass="10">
+      <body position="0.0125,-0.4875,0"  orientation="0,0,0" />
+    </box>
+    <box id="bs" size="0.025,0.975,0.05" movable="false" mass="10">
+      <body position="-0.4875,-0.0125,0"  orientation="0,0,0" />
+    </box>
+    <box id="bw" size="0.975,0.025,0.05" movable="false" mass="10">
+      <body position="-0.0125,0.4875,0"  orientation="0,0,0" />
+    </box-->
+  <arena size="1, 1, 0.625" center="0, 0, 0.125">
+    <distribute>
+      <position method="grid" center="0.15,0,0" distances="0.1,0.1,0" layout="1,1,1" />
+      <orientation method="grid" center="0,0,0" distances="0,0,0" layout="2,1,1" />
+      <entity quantity="1" max_trials="1">
+        <!-- ******************************* -->
+        <!-- * Stigmergic Block Definition * -->
+        <!-- ******************************* -->
+        <prototype id="sblock0" movable="true">
+          <body position="-0.035,0,0" orientation="0,0,0" />
+          <controller config="sb_controller"/>
+          <links ref="block">
+            <link id="block" geometry="box" size="0.055,0.055,0.055" mass="0.102"/>
+            <link id="magnet00" geometry="sphere" radius=".003" mass=".001" position=" .0225, .0225,.002"/>
+            <link id="magnet01" geometry="sphere" radius=".003" mass=".001" position="-.0225, .0225,.002"/>
+            <link id="magnet02" geometry="sphere" radius=".003" mass=".001" position="-.0225,-.0225,.002"/>
+            <link id="magnet03" geometry="sphere" radius=".003" mass=".001" position=" .0225,-.0225,.002"/>
+            <link id="magnet10" geometry="sphere" radius=".003" mass=".001" position=" .0225, .0225,.047"/>
+            <link id="magnet11" geometry="sphere" radius=".003" mass=".001" position="-.0225, .0225,.047"/>
+            <link id="magnet12" geometry="sphere" radius=".003" mass=".001" position="-.0225,-.0225,.047"/>
+            <link id="magnet13" geometry="sphere" radius=".003" mass=".001" position=" .0225,-.0225,.047"/>
+          </links>
+          <joints>
+            <joint id="block_magnet00" type="spherical">
+              <parent link="block" position="0.0225,0.0225,0.005" orientation="0,0,0"/>
+              <child link="magnet00" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+            <joint id="block_magnet01" type="spherical">
+              <parent link="block" position="-0.0225,0.0225,0.005" orientation="0,0,0"/>
+              <child link="magnet01" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+            <joint id="block_magnet02" type="spherical">
+              <parent link="block" position="-0.0225,-0.0225,0.005" orientation="0,0,0"/>
+              <child link="magnet02" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+            <joint id="block_magnet03" type="spherical">
+              <parent link="block" position="0.0225,-0.0225,0.005" orientation="0,0,0"/>
+              <child link="magnet03" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+            <joint id="block_magnet10" type="spherical">
+              <parent link="block" position="0.0225,0.0225,0.050" orientation="0,0,0"/>
+              <child link="magnet10" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+            <joint id="block_magnet11" type="spherical">
+              <parent link="block" position="-0.0225,0.0225,0.050" orientation="0,0,0"/>
+              <child link="magnet11" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+            <joint id="block_magnet12" type="spherical">
+              <parent link="block" position="-0.0225,-0.0225,0.050" orientation="0,0,0"/>
+              <child link="magnet12" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+            <joint id="block_magnet13" type="spherical">
+              <parent link="block" position="0.0225,-0.0225,0.050" orientation="0,0,0"/>
+              <child link="magnet13" position="0,0,0.003" orientation="0,0,0"/>
+            </joint>
+          </joints>
+          <devices>
+            <magnets>
+              <magnet id="magnet00" passive_field="0,0,20" anchor="magnet00" offset="0,0,.003"/>
+              <magnet id="magnet01" passive_field="0,0,20" anchor="magnet01" offset="0,0,.003"/>
+              <magnet id="magnet02" passive_field="0,0,20" anchor="magnet02" offset="0,0,.003"/>
+              <magnet id="magnet03" passive_field="0,0,20" anchor="magnet03" offset="0,0,.003"/>
+              <magnet id="magnet10" passive_field="0,0,20" anchor="magnet10" offset="0,0,.003"/>
+              <magnet id="magnet11" passive_field="0,0,20" anchor="magnet11" offset="0,0,.003"/>
+              <magnet id="magnet12" passive_field="0,0,20" anchor="magnet12" offset="0,0,.003"/>
+              <magnet id="magnet13" passive_field="0,0,20" anchor="magnet13" offset="0,0,.003"/>
+            </magnets>
+            <tags medium="apriltags">
+              <tag anchor="block" observable_angle="75" side_length="0.024"
+                   position="0.000,0.000,0.056" orientation="0,0,0"/>
+              <tag anchor="block"  observable_angle="75" side_length="0.024"
+                   position="0.0285,0.000,0.0275" orientation="0,90,0"/>
+              <tag anchor="block" observable_angle="75" side_length="0.024"
+                   position="0.000,-0.0285,0.0275" orientation="0,0,90"/>
+              <tag anchor="block" observable_angle="75" side_length="0.024"
+                   position="-0.0285,0.000,0.0275" orientation="0,-90,0"/>
+              <tag anchor="block" observable_angle="75" side_length="0.024"
+                   position="0.000,0.0285,0.0275" orientation="0,0,-90"/>
+              <tag anchor="block" observable_angle="75" side_length="0.024"
+                   position="0.000,0.000,-0.001" orientation="0,0,180"/>
+            </tags>
+            <directional_leds medium="directional_leds">
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,0.020,0.056" orientation="0,0,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.020,0.000,0.056" orientation="0,0,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,-0.020,0.056" orientation="0,0,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.020,0.000,0.056" orientation="0,0,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.0285,0.000,0.0475" orientation="0,90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.0285,0.020,0.0275" orientation="0,90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.0285,0.000,0.0075" orientation="0,90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.0285,-0.020,0.0275" orientation="0,90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,-0.0285,0.0475" orientation="0,0,90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.020,-0.0285,0.0275" orientation="0,0,90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,-0.0285,0.0075" orientation="0,0,90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.020,-0.0285,0.0275" orientation="0,0,90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.0285,0.000,0.0475" orientation="0,-90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.0285,-0.020,0.0275" orientation="0,-90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.0285,0.000,0.0075" orientation="0,-90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.0285,0.020,0.0275" orientation="0,-90,0"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,0.0285,0.0475" orientation="0,0,-90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.020,0.0285,0.0275" orientation="0,0,-90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,0.0285,0.0075" orientation="0,0,-90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.020,0.0285,0.0275" orientation="0,0,-90"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,0.020,-0.001" orientation="0,0,180"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.020,0.000,-0.001" orientation="0,0,180"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="0.000,-0.020,-0.001" orientation="0,0,180"/>
+              <directional_led anchor="block" observable_angle="75" color="black"
+                               position="-0.020,0.000,-0.001" orientation="0,0,180"/>
+            </directional_leds>
+            <radios medium="nfc">
+              <radio anchor="block" position="0.000,0.000,0.050" range="0.020"/>
+              <radio anchor="block" position="0.0225,0.000,0.0275" range="0.020"/>
+              <radio anchor="block" position="0.000,-0.0225,0.0275" range="0.020"/>
+              <radio anchor="block" position="-0.0225,0.000,0.0275" range="0.020"/>
+              <radio anchor="block" position="0.000,0.0225,0.0275" range="0.020"/>
+              <radio anchor="block" position="0.000,0.000,0.005" range="0.020"/>
+            </radios>
+          </devices>
+        </prototype>
+      </entity>
+    </distribute>
+  </arena>
+
+  <!-- ******************* -->
+  <!-- * Physics engines * -->
+  <!-- ******************* -->
+  <physics_engines>
+    <dynamics3d id="dyn3d" iterations="20">
+      <gravity g="9.8" />
+      <floor height="0.01"/>
+      <magnetism max_distance="0.04"/>
+    </dynamics3d>
+  </physics_engines>
+
+  <!-- ********* -->
+  <!-- * Media * -->
+  <!-- ********* -->
+  <media>
+    <directional_led id="directional_leds" index="grid" grid_size="20,20,20" />
+    <tag id="apriltags" index="grid" grid_size="20,20,20" />
+    <radio id="nfc" index="grid" grid_size="20,20,20" />
+  </media>
+
+  <!-- ****************** -->
+  <!-- * Visualization * -->
+  <!-- ****************** -->
+  <visualization>
+    <qt-opengl lua_editor="false">
+      <camera>
+        <placement idx="0" position=" 0,  -2.5,1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="1" position=" 2.5,-2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="2" position=" 2.5, 0,  1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="3" position=" 2.5, 2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="4" position=" 0,   2.5,1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="5" position="-2.5, 2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="6" position="-2.5, 0,  1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="7" position="-2.5,-2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="8" position="0,0,0.5" look_at="0.0,0.0,0.125" up="1,0,0" lens_focal_length="40" />
+      </camera>
+    </qt-opengl>
+  </visualization>
+
+</argos-configuration>

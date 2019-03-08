@@ -1,0 +1,242 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+  <!-- ************************* -->
+  <!-- * General configuration * -->
+  <!-- ************************* -->
+  <framework>
+    <system threads="0" />
+    <experiment length="0" ticks_per_second="10" random_seed="12345" />
+  </framework>
+  
+  <!-- *************** -->
+  <!-- * Controllers * -->
+  <!-- *************** -->
+  <controllers>
+    <lua_controller id="builderbot">
+      <actuators>
+        <builderbot_electromagnet_system implementation="default" />
+        <builderbot_differential_drive implementation="default" />
+        <builderbot_lift_system implementation="default" />
+        <builderbot_nfc implementation="default" />
+        <builderbot_wifi implementation="default" />
+      </actuators>
+      <sensors>
+        <builderbot_camera_system implementation="default"
+                                  show_frustum="false" 
+                                  show_tag_rays="false"
+                                  show_led_rays="false" />
+        <builderbot_rangefinders implementation="default"
+                                 show_rays="true" />
+        <builderbot_differential_drive implementation="default" />
+        <builderbot_electromagnet_system implementation="default" />
+        <builderbot_lift_system implementation="default" />
+        <builderbot_nfc implementation="default" show_rays="true" />
+      </sensors>
+      <params script="src/testing/builderbot.lua" />
+    </lua_controller>
+
+    <lua_controller id="block">
+      <actuators>
+        <directional_leds implementation="default" />
+        <radios implementation="default"/>
+      </actuators>
+      <sensors>
+        <radios implementation="default" show_rays="true"/>
+      </sensors>
+      <params script="src/testing/block.lua" />
+    </lua_controller>
+
+    <lua_controller id="prototype">
+      <actuators>
+        <joints implementation="default">
+          <joint id="base_wheel_left" mode="velocity" max_impulse="0.05"/>
+          <joint id="base_wheel_right" mode="velocity" max_impulse="0.05"/>
+          <joint id="base_end_effector" mode="velocity" max_impulse="0.05"/>
+        </joints>
+      </actuators>
+      <sensors>
+        <joints implementation="default">
+          <joint id="base_wheel_left" mode="velocity"/>
+          <joint id="base_wheel_right" mode="velocity"/>
+          <joint id="base_end_effector" mode="position"/>
+        </joints>
+      </sensors>
+      <params script="src/testing/prototype.lua"/>
+    </lua_controller>
+
+
+  </controllers>
+
+  <!-- *********************** -->
+  <!-- * Arena configuration * -->
+  <!-- *********************** -->
+  <arena size="1, 1, 2" center="0, 0, 0.5">
+
+    <!--box id="box" size="0.0025,0.0025,0.0025" movable="true" mass="0.1">
+       <body position="0.180,0,0.41" orientation="0,0,0"/>
+    </box-->
+
+    <!--box id="box2" size="0.0025,0.0025,0.0025" movable="true" mass="0.1">
+       <body position="-0.320,0,0.41" orientation="0,0,0"/>
+    </box-->
+
+    <block id="block_debug1" debug="true">
+      <body position="0.095,0,0" orientation="0,0,0"/>
+      <controller config="block"/>
+    </block>
+
+    <block id="block_debug2" debug="true">
+      <body position="0.195,0,0" orientation="0,0,0"/>
+      <controller config="block"/>
+    </block>
+
+    <!--block id="block_debug2" debug="true">
+      <body position="0.195,0,0" orientation="0,0,0"/>
+      <controller config="block"/>
+    </block-->
+
+
+    <builderbot id="builderbot" debug="true">
+      <body position="0,0,0" orientation="0,0,0"/>
+      <controller config="builderbot"/>
+    </builderbot>
+
+    <!--prototype id="prototype0" movable="true">
+      <body position="-0.25,0,0.385" orientation="0,0,180" />
+      <controller config="prototype"/>
+      <links ref="base">
+        <link id="base" geometry="box" size="0.13,0.14,0.0393566" mass="0.5"
+              position="-0.02,0,0.002"/>
+        <link id="wheel_right" geometry="cylinder" radius="0.02" height="0.015" mass="0.10"
+              position="0,-0.0525,0.02" orientation="0,0,90"/>
+        <link id="wheel_left" geometry="cylinder" radius="0.02" height="0.015" mass="0.10"
+              position="0,0.0525,0.02" orientation="0,0,-90"/>
+        <link id="pivot_front" geometry="sphere" radius="0.02" mass="0.10"
+              position="0.025,0.0,0" orientation="0,0,0" />
+        <link id="pivot_back" geometry="sphere" radius="0.02" mass="0.10"
+              position="-0.065,0,0" orientation="0,0,0" />
+        <link id="upper_base" geometry="convex_hull" mass="0.6" position="-0.02,0,0.0413566">
+              (0.039, 0.065, 0) (-0.039, 0.065, 0) (0.039,-0.065, 0) (-0.039,-0.065, 0)
+              (0.065, 0.039, 0) (-0.065, 0.039, 0) (0.065,-0.039, 0) (-0.065,-0.039, 0)
+              (0.039, 0.065, 0.0569) (-0.039, 0.065, 0.0569) (0.039,-0.065, 0.0569) (-0.039,-0.065, 0.0569)
+              (0.065, 0.039, 0.0569) (-0.065, 0.039, 0.0569) (0.065,-0.039, 0.0569) (-0.065,-0.039, 0.0569)
+        </link>
+        <link id="lifter" geometry="box" size="0.0585,0.0945,0.28775" mass="0.6"
+              position="0.0,0.0,0.0982566" orientation="0,0,0"/>
+        <link id="stepper_motor" geometry="box" size="0.037,0.05,0.048" mass="0.30"
+              position="-0.055,0,0.0982566"/>
+        <link id="end_effector" geometry="box" size="0.065875,0.072,0.010" mass="0.20"
+              position="0.0980875,0,0.055"/>
+        <link id="end_effector_link" geometry="box" size="0.01025,0.0575,0.15675" mass="0.10"
+              position="0.060025,0,0.00575"/>
+      </links>
+      <joints>
+        <joint id="base_wheel_right" type="revolute" axis="0,0,1">
+          <parent link="base" position="0.02,-0.0525,0.018" orientation="0,0,90"/>
+          <child link="wheel_right" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+        <joint id="base_wheel_left" type="revolute" axis="0,0,1">
+          <parent link="base" position="0.02,0.0525,0.018" orientation="0,0,-90"/>
+          <child link="wheel_left" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+        <joint id="base_pivot_front" type="spherical">
+          <parent link="base" position="0.045,0.00,0.018" orientation="0,0,0"/>
+          <child link="pivot_front" position="0,0,0.02" orientation="0,0,0"/>
+        </joint>
+        <joint id="base_pivot_back" type="spherical">
+          <parent link="base" position="-0.045,0,0.018" orientation="0,0,0"/>
+          <child link="pivot_back" position="0,0,0.02" orientation="0,0,0"/>
+        </joint>
+        <joint id="base_upper_base" type="fixed" axis="0,0,1">
+          <parent link="base" position="0.0,0,0.0393566" orientation="0,0,0"/>
+          <child link="upper_base" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+        <joint id="upper_base_lifter" type="fixed" axis="0,0,1">
+          <parent link="upper_base" position="0.02,0,0.0569" orientation="0,0,0"/>
+          <child link="lifter" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+        <joint id="upper_base_stepper_motor" type="fixed" axis="0,0,1">
+          <parent link="upper_base" position="-0.035,0,0.0569" orientation="0,0,0"/>
+          <child link="stepper_motor" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+        <joint id="base_end_effector" type="prismatic" axis="0,0,1" limit="0.0:0.145">
+          <parent link="base" position="0.1180875,0,0.053" orientation="0,0,0"/>
+          <child link="end_effector" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+        <joint id="end_effector_end_effector_link" type="fixed">
+          <parent link="end_effector" position="-0.0380625,0,-0.04925" orientation="0,0,0"/>
+          <child link="end_effector_link" position="0,0,0" orientation="0,0,0"/>
+        </joint>
+      </joints>
+    </prototype-->
+
+
+
+    <!--block id="block" debug="true">
+      <body position="0.195,0,0.060" orientation="0,0,0"/>
+      <controller config="block"/>
+    </block-->
+
+    <!--block id="block2" debug="false">
+      <body position="0.295,-0.1,0" orientation="0,0,0"/>
+      <controller config="block"/>
+    </block-->
+
+
+    <!--distribute>
+      <position method="grid" center="0.4,0,0" distances="0.07,0.07,0" layout="2,2,1" />
+      <orientation method="grid" center="0,0,0" distances="0,0,0" layout="2,2,1" />
+      <entity quantity="1" max_trials="1">
+        <block id="block">
+          <controller config="block"/>
+        </block>
+      </entity>
+    </distribute-->
+
+  </arena>
+
+  <!-- ******************* -->
+  <!-- * Physics engines * -->
+  <!-- ******************* -->
+  <physics_engines>
+    <dynamics3d id="dyn3d" iterations="25">
+      <gravity g="9.8" />
+      <floor height="0.01"/>
+      <magnetism max_distance="0.04"/>
+    </dynamics3d>
+  </physics_engines>
+
+  <!-- ********* -->
+  <!-- * Media * -->
+  <!-- ********* -->
+  <media>
+    <directional_led id="directional_leds" index="grid" grid_size="20,20,20"/>
+    <tag id="tags" index="grid" grid_size="20,20,20" />
+    <radio id="nfc" index="grid" grid_size="20,20,20" />
+    <radio id="wifi" index="grid" grid_size="20,20,20" />
+  </media>
+
+  <!-- ****************** -->
+  <!-- * Visualization * -->
+  <!-- ****************** -->
+
+  <visualization>
+    <qt-opengl lua_editor="true">
+      <!--user_functions label="srocs_qtopengl_user_functions" /-->
+      <camera>
+        <placement idx="0" position=" 0,  -2.5,1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="1" position=" 2.5,-2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="2" position=" 2.5, 0,  1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="3" position=" 2.5, 2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="4" position=" 0,   2.5,1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="5" position="-2.5, 2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="6" position="-2.5, 0,  1" look_at="0,0,0.05" lens_focal_length="78" />
+        <placement idx="7" position="-2.5,-2.5,1" look_at="0,0,0.05" lens_focal_length="92" />
+        <placement idx="8" position="0,0,0.5" look_at="0.0,0.0,0.125" up="1,0,0" lens_focal_length="40" />
+      </camera>
+    </qt-opengl>
+  </visualization>
+
+
+</argos-configuration>
