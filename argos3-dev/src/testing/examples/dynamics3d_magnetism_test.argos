@@ -55,10 +55,10 @@
   <!-- * Physics engines * -->
   <!-- ******************* -->
   <physics_engines>
-    <dynamics3d id="dyn3d" iterations="20">
+    <dynamics3d id="dyn3d" iterations="200">
       <gravity g="9.8" />
       <floor height="0.01"/>
-      <magnetism max_distance="0.08"/>
+      <magnetism max_distance="0.04"/>
     </dynamics3d>
   </physics_engines>
 

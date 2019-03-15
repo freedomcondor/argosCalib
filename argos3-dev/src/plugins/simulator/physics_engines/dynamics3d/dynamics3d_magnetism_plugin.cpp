@@ -120,6 +120,22 @@ namespace argos {
             btScalar fDotProduct01 = cRotatedFieldDipole0.dot(cRotatedFieldDipole1);
             btScalar fDotProduct0 = cRotatedFieldDipole0.dot(cNormalizedSeparation);
             btScalar fDotProduct1 = cRotatedFieldDipole1.dot(cNormalizedSeparation);
+
+            ///*
+            btScalar fNearThreshold = 0.00905;
+            btScalar fFarThreshold = 0.00910;
+            btScalar fWindow = fFarThreshold - fNearThreshold;
+
+            btScalar fDiaNear = 0.01200;
+            btScalar fDiaFar = 0.0129;
+
+            if (fDistance < fNearThreshold) m_fForceConstant = 0;
+            else if (fDistance < fFarThreshold)
+               m_fForceConstant = (fDistance - fNearThreshold) / fWindow * 7.0500949e-13;
+            //else if ((fDiaNear < fDistance) && (fDistance < fDiaFar)) m_fForceConstant = 0;
+            else m_fForceConstant = 7.0500949e-13;
+            //*/
+
             /* calculate the magnetic force and torque */
             const btVector3& cTorque0 =
                ((3 * fDotProduct1 * cCrossProduct0) - cCrossProduct01) *

@@ -12,6 +12,7 @@ namespace argos {
    class CBlockEntity;
 }
 
+#include <argos3/plugins/simulator/physics_engines/dynamics3d/bullet/BulletDynamics/Featherstone/btMultiBodySphericalJointMotor.h>
 #include <argos3/plugins/simulator/physics_engines/dynamics3d/dynamics3d_multi_body_object_model.h>
 
 namespace argos {
@@ -31,6 +32,10 @@ namespace argos {
 
       virtual void UpdateFromEntityStatus();
 
+      void AddToWorld(btMultiBodyDynamicsWorld& c_world);
+
+      void RemoveFromWorld(btMultiBodyDynamicsWorld& c_world);
+
    public:
 
       struct SMagnet {        
@@ -39,6 +44,8 @@ namespace argos {
          btVector3 Inertia;
          btVector3 Position;
          btQuaternion Orientation;
+         //btMultiBodySphericalJointMotor FrictionMotor;
+         std::unique_ptr<btMultiBodySphericalJointMotor> FrictionMotor;
       };
 
    private:

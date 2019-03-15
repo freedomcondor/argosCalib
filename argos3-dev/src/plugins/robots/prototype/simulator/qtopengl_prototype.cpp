@@ -68,29 +68,6 @@ namespace argos {
       glNewList(m_unTagList, GL_COMPILE);
       MakeTag();
       glEndList();
-
-      try {
-         /* Create OBJ models */
-         m_mapModels.emplace("base", new CQTOpenGLObjModel("builderbot.obj"));
-         m_mapModels.emplace("end_effector", new CQTOpenGLObjModel("builderbot-manipulator.obj"));
-         m_mapModels.emplace("epuck_wheel_right", new CQTOpenGLObjModel("epuck_wheel.obj"));
-         m_mapModels.emplace("epuck_wheel_left", new CQTOpenGLObjModel("epuck_wheel.obj"));
-         m_mapModels.emplace("epuck_base", new CQTOpenGLObjModel("epuck_base.obj"));
-         /* Create and get a reference to materials for the LEDs */
-         m_vecMaterials = {
-            &m_mapModels["epuck_base"]->GetMaterial("led_0"),
-            &m_mapModels["epuck_base"]->GetMaterial("led_1"),
-            &m_mapModels["epuck_base"]->GetMaterial("led_2"),
-            &m_mapModels["epuck_base"]->GetMaterial("led_3"),
-            &m_mapModels["epuck_base"]->GetMaterial("led_4"),
-            &m_mapModels["epuck_base"]->GetMaterial("led_5"),
-            &m_mapModels["epuck_base"]->GetMaterial("led_6"),
-            &m_mapModels["epuck_base"]->GetMaterial("led_7")
-         };
-      }
-      catch(CARGoSException& ex) {
-         THROW_ARGOSEXCEPTION_NESTED("Can not load models for prototype", ex);
-      }
    }
 
    /****************************************/
@@ -137,43 +114,6 @@ namespace argos {
    void CQTOpenGLPrototype::DrawEntity(CPrototypeEntity& c_entity) {
       /* Draw the links */
       for(CPrototypeLinkEntity* pcLink : c_entity.GetLinkEquippedEntity().GetLinks()){
-         std::map<std::string, CQTOpenGLObjModel*>::iterator itModel = std::end(m_mapModels); //m_mapModels.find(pcLink->GetId());
-         if(itModel != std::end(m_mapModels)) {
-            glPushMatrix();
-            if(pcLink->GetId() == "base") {
-               /* Get the position of the link */
-               const CVector3& cPosition = c_entity.GetEmbodiedEntity().GetOriginAnchor().Position;
-               /* Get the orientation of the link */
-               const CQuaternion& cOrientation = c_entity.GetEmbodiedEntity().GetOriginAnchor().Orientation;
-               CRadians cZAngle, cYAngle, cXAngle;
-               cOrientation.ToEulerAngles(cZAngle, cYAngle, cXAngle);
-
-               glTranslatef(cPosition.GetX(), cPosition.GetY(), cPosition.GetZ());
-               glRotatef(ToDegrees(cXAngle).GetValue(), 1.0f, 0.0f, 0.0f);
-               glRotatef(ToDegrees(cYAngle).GetValue(), 0.0f, 1.0f, 0.0f);
-               glRotatef(ToDegrees(cZAngle).GetValue(), 0.0f, 0.0f, 1.0f);
-            }
-            else {
-               /* Get the position of the link */
-               const CVector3& cPosition = pcLink->GetAnchor().Position;
-               /* Get the orientation of the link */
-               const CQuaternion& cOrientation = pcLink->GetAnchor().Orientation;
-               CRadians cZAngle, cYAngle, cXAngle;
-               cOrientation.ToEulerAngles(cZAngle, cYAngle, cXAngle);
-               glPushMatrix();
-               glTranslatef(cPosition.GetX(), cPosition.GetY(), cPosition.GetZ());
-               glRotatef(ToDegrees(cXAngle).GetValue(), 1.0f, 0.0f, 0.0f);
-               glRotatef(ToDegrees(cYAngle).GetValue(), 0.0f, 1.0f, 0.0f);
-               glRotatef(ToDegrees(cZAngle).GetValue(), 0.0f, 0.0f, 1.0f);
-            }
-            /* draw the model */
-            itModel->second->Draw();
-            glPopMatrix();
-         }
-
-         //const SAnchor& sTemp = pcLink->GetAnchor();
-         //std::cerr << sTemp.Id << ": " << sTemp.OffsetPosition << " / " << sTemp.OffsetOrientation << std::endl;
-
          /* Get the position of the link */
          const CVector3& cPosition = pcLink->GetAnchor().Position;
          /* Get the orientation of the link */

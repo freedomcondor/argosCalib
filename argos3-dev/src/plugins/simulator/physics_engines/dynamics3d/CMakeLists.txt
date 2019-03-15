@@ -476,7 +476,8 @@ set(ARGOS3_HEADERS_PLUGINS_SIMULATOR_PHYSICS_ENGINES_DYNAMICS3D
   dynamics3d_plugin.h
   dynamics3d_floor_plugin.h
   dynamics3d_gravity_plugin.h
-  dynamics3d_magnetism_plugin.h)
+  dynamics3d_magnetism_plugin.h
+  dynamics3d_virtual_magnetism_plugin.h)
   
 #
 # Source files
@@ -491,7 +492,8 @@ set(ARGOS3_SOURCES_PLUGINS_SIMULATOR_PHYSICS_ENGINES_DYNAMICS3D
   dynamics3d_multi_body_object_model.cpp
   dynamics3d_floor_plugin.cpp
   dynamics3d_gravity_plugin.cpp
-  dynamics3d_magnetism_plugin.cpp)
+  dynamics3d_magnetism_plugin.cpp
+  dynamics3d_virtual_magnetism_plugin.cpp)
 
 #
 # Create Dynamics3d engine plugin library

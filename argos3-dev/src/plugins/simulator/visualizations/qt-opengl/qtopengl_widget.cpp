@@ -169,7 +169,8 @@ namespace argos {
          CallEntityOperation<CQTOpenGLOperationDrawSelected, CQTOpenGLWidget, void>(*this, *m_sSelectionInfo.Entity);
          glPopMatrix();
       }
-      /*
+
+      // ------------------ /*
       glDisable(GL_LIGHTING);
       glDisable(GL_DEPTH_TEST);
       glDisable(GL_CULL_FACE);
@@ -214,7 +215,7 @@ namespace argos {
       glEnable(GL_LIGHTING);
       glEnable(GL_DEPTH_TEST);
       glEnable(GL_CULL_FACE);
-      */
+      // --------------------------- */
       /* Draw in world */
       glPushMatrix();
       m_cUserFunctions.DrawInWorld();

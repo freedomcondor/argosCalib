@@ -40,6 +40,7 @@ namespace argos {
                                       m_vecBodies[0]->GetData().Inertia,
                                       m_bFixedBase,
                                       false);
+                                      //true);
       /* Disable collisions between bodies in the same model */
       m_cMultiBody.setHasSelfCollision(false);
       /* Reset bodies */

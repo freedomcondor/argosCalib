@@ -49,7 +49,8 @@ namespace argos {
       std::shared_ptr<btCollisionShape> ptrShape =
          CDynamics3DShapeManager::RequestBox(btVector3(0.5f, 0.5f, 0.5f) * m_fBlockSideLength);
       /* get friction */
-      btScalar fFriction = GetEngine().GetDefaultFriction();
+      //btScalar fFriction = GetEngine().GetDefaultFriction(); // default is 2
+      btScalar fFriction = 0.5;// default is 2
       /* calculate the inertia of the block */
       btVector3 cInertia;
       ptrShape->calculateLocalInertia(m_fBlockMass, cInertia);
@@ -96,14 +97,14 @@ namespace argos {
          /* add a magnetic dipole at the center of the body of the magnet */
          std::vector<CAbstractBody::SData::SDipole> vecDipoles;
          vecDipoles.emplace_back([] () {
-            return btVector3(0.0f, 20.0f, 0.0f);
+            return btVector3(0.0f, 50.0f, 0.0f);
          }, btTransform(btQuaternion(0.0f, 0.0f, 0.0f, 1.0f), btVector3(0.0f, 0.0f, 0.0f)));
          /* create the body */
          CAbstractBody::SData sMagnetData(cMagnetStartTransform,
                                           cMagnetCenterOfMassOffset,
                                           cMagnetInertia,
                                           m_fMagnetMass,
-                                          fFriction,
+                                          fFriction * 50,
                                           vecDipoles);
          /* anchors for the block's magnets are only added in debug mode */
          SAnchor* psAnchor = nullptr;
@@ -114,14 +115,23 @@ namespace argos {
          std::shared_ptr<CLink> ptrMagnet = 
             std::make_shared<CLink>(*this, unMagnetIndex, psAnchor, ptrMagnetShape, sMagnetData);
          m_vecBodies.push_back(ptrMagnet);
+         /* create a friction motor, tune the number for damp */
+         std::unique_ptr<btMultiBodySphericalJointMotor> ptrbtFrictionMotor = 
+            std::make_unique<btMultiBodySphericalJointMotor>
+               (&m_cMultiBody, unMagnetIndex, 0.000000001);
+         ptrbtFrictionMotor.get()->setPositionTarget(btQuaternion(0,0,0,1), 0.00);
+            // TODO: release it later
+          
          /* add the magnet to our array */
          m_arrMagnets[unMagnetIndex] = {
             unMagnetIndex,
             m_fMagnetMass,
             cMagnetInertia,
             c_offset,
-            btQuaternion(0.0f, 0.0f, 0.0f, 1.0f)
+            btQuaternion(0.0f, 0.0f, 0.0f, 1.0f),
+            std::move(ptrbtFrictionMotor)
          };
+
          unMagnetIndex++;
       }
       /* reset the model before use */
@@ -164,6 +174,33 @@ namespace argos {
 
    void CDynamics3DBlockModel::UpdateFromEntityStatus() {
       CDynamics3DMultiBodyObjectModel::UpdateFromEntityStatus();    
+   }
+
+   /****************************************/
+   /****************************************/
+
+   void CDynamics3DBlockModel::AddToWorld(btMultiBodyDynamicsWorld& c_world) {
+      /* run the base class's implementation of this method */
+      CDynamics3DMultiBodyObjectModel::AddToWorld(c_world);
+      /* TODO: add friction to the magnets */
+
+      for(const SMagnet& s_magnet : m_arrMagnets) {
+         c_world.addMultiBodyConstraint(s_magnet.FrictionMotor.get());
+      }
+   }
+
+   /****************************************/
+   /****************************************/
+
+   void CDynamics3DBlockModel::RemoveFromWorld(btMultiBodyDynamicsWorld& c_world) {
+      /* TODO: remove friction to the magnets */
+
+      for(const SMagnet& s_magnet : m_arrMagnets) {
+         c_world.removeMultiBodyConstraint(s_magnet.FrictionMotor.get());
+      }
+
+      /* run the base class's implementation of this method */
+      CDynamics3DMultiBodyObjectModel::RemoveFromWorld(c_world);
    }
 
    /****************************************/
