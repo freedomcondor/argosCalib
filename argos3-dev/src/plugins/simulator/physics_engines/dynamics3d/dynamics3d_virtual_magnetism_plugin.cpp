@@ -32,7 +32,6 @@ namespace argos {
                              std::begin(vecBodies),
                              std::end(vecBodies));
       }
-
    }
 
    /****************************************/
@@ -68,16 +67,35 @@ namespace argos {
 
       for(std::vector< std::shared_ptr<CDynamics3DModel::CAbstractBody> >::iterator 
           itBody0 = std::begin(m_vecTargets);
-          itBody0 = (std::end(m_vecTargets) - 1);
+          itBody0 != std::end(m_vecTargets) - 1;
           ++itBody0) {
 
          for(std::vector< std::shared_ptr<CDynamics3DModel::CAbstractBody> >::iterator 
-             itBody1 = std::next(itBody1, 1);
+             itBody1 = std::next(itBody0, 1);
              itBody1 != std::end(m_vecTargets);
              ++itBody1) {
-            //std::cerr << "I am a pair:: " << itBody0->GetId() << "," 
-            //                              << itBody1->GetId() << std::endl;
-            std:cerr << "i am a pair";
+            std::shared_ptr<CDynamics3DModel::CAbstractBody>& ptr_body0 = *itBody0;
+            std::shared_ptr<CDynamics3DModel::CAbstractBody>& ptr_body1 = *itBody1;
+
+            btVector3 btLocation0 = ptr_body0->GetTransform().getOrigin();
+            btVector3 btLocation1 = ptr_body1->GetTransform().getOrigin();
+
+            btQuaternion btQuaternion0 = ptr_body0->GetTransform().getRotation();
+            btQuaternion btQuaternion1 = ptr_body1->GetTransform().getRotation();
+
+            CBoxEntity* pcBoxEntity0 = 
+               dynamic_cast<CBoxEntity*>(&ptr_body0->GetModel().GetComposableEntity());    
+            CBoxEntity* pcBoxEntity1 = 
+               dynamic_cast<CBoxEntity*>(&ptr_body1->GetModel().GetComposableEntity());    
+            std::cerr << "I am a pair:: " << pcBoxEntity0->GetId() << ":"
+                                          << btLocation0.getX() << ","
+                                          << btLocation0.getY() << ","
+                                          << btLocation0.getZ() << std::endl
+
+                                          << pcBoxEntity1->GetId() << ":"
+                                          << btLocation1.getX() << ","
+                                          << btLocation1.getY() << ","
+                                          << btLocation1.getZ() << std::endl;
          }
       }
 

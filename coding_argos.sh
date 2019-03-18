@@ -3,8 +3,10 @@ vim coding_argos.sh -c "
 	set shiftwidth=3
 	set expandtab
 
-   tabnew argos3-dev/src/plugins/simulator/physics_engines/dynamics3d/dynamics3d_virtual_magnetism_plugin.h
+	tabnew argos3-dev/src/plugins/simulator/physics_engines/dynamics3d/dynamics3d_model.h
    vsp argos3-dev/src/plugins/simulator/physics_engines/dynamics3d/dynamics3d_virtual_magnetism_plugin.cpp
+
+   tabnew argos3-dev/src/plugins/simulator/physics_engines/dynamics3d/dynamics3d_virtual_magnetism_plugin.h
 
    tabnew argos3-dev/src/plugins/simulator/physics_engines/dynamics3d/dynamics3d_magnetism_plugin.h
    vsp argos3-dev/src/plugins/simulator/physics_engines/dynamics3d/dynamics3d_magnetism_plugin.cpp
