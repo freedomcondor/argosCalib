@@ -80,13 +80,24 @@
     </builderbot>
 	-->
 
+
 	<!--
+    <box id="box11" size="0.055,0.055,0.055" movable="true" mass="0.110">
+       <body position="-0.030,0.06,0.00" orientation="0,0,0"/>
+    </box>
+
+    <box id="box12" size="0.055,0.055,0.055" movable="true" mass="0.110">
+       <body position="0.030,0.06,0.00" orientation="0,0,0"/>
+    </box>
 	-->
+
+	<!--
     <box id="box" size="0.11,0.055,0.165" movable="false" mass="0.660">
        <body position="0.00,0.06,0.00" orientation="0,0,0"/>
     </box>
+	-->
 
-    <box id="box1" size="0.055,0.055,0.055" movable="true" mass="0.110">
+    <box id="box1" size="0.055,0.055,0.055" movable="false" mass="0.110">
        <body position="0.030,0,0.00" orientation="0,0,0"/>
     </box>
 
@@ -95,7 +106,7 @@
     </box>
 
     <box id="box3" size="0.055,0.055,0.055" movable="true" mass="0.110">
-       <body position="0.030,0,0.12" orientation="0,0,0"/>
+       <body position="0.040,0,0.12" orientation="10,0,0"/>
     </box>
 
     <box id="box4" size="0.055,0.055,0.055" movable="true" mass="0.110">
@@ -112,53 +123,41 @@
 
 
     <block id="block_debug1" debug="true">
-      <body position="0.099,0,0.00" orientation="0,0,0"/>
+      <body position="0.199,0,0.00" orientation="0,0,0"/>
       <controller config="block"/>
     </block>
 
-	<!--
-	-->
     <block id="block_debug2" debug="true">
-      <body position="0.099,0,0.06" orientation="0,0,0"/>
+      <body position="0.199,0,0.06" orientation="0,0,0"/>
       <controller config="block"/>
     </block>
 
 	<!--
-	-->
     <block id="block_debug3" debug="true">
       <body position="0.099,0,0.12" orientation="0,0,0"/>
       <controller config="block"/>
     </block>
 
-	<!--
-	-->
     <block id="block_debug4" debug="true">
       <body position="0.165,0,0.00" orientation="0,0,0"/>
       <controller config="block"/>
     </block>
 
-	<!--
-	-->
     <block id="block_debug5" debug="true">
       <body position="0.165,0,0.06" orientation="0,0,0"/>
       <controller config="block"/>
     </block>
 
-	<!--
-	-->
     <block id="block_debug6" debug="true">
       <body position="0.165,0,0.12" orientation="0,0,0"/>
       <controller config="block"/>
     </block>
 
-	<!--
     <block id="block_debug7" debug="true">
       <body position="0.099,0.6,0.00" orientation="0,0,0"/>
       <controller config="block"/>
     </block>
-	-->
 
-	<!--
     <block id="block_debug2" debug="true">
       <body position="0.195,0,0" orientation="0,0,0"/>
       <controller config="block"/>
@@ -217,7 +216,7 @@
   <!-- ****************** -->
 
   <visualization>
-    <qt-opengl lua_editor="true">
+    <qt-opengl lua_editor="false">
       <!--user_functions label="srocs_qtopengl_user_functions" /-->
       <camera>
         <placement idx="0" position=" 0,  -2.5,1" look_at="0,0,0.05" lens_focal_length="78" />

@@ -28,7 +28,9 @@ namespace argos {
    class CDynamics3DVirtualMagnetismPlugin : public CDynamics3DPlugin {
    public:
       CDynamics3DVirtualMagnetismPlugin() :
-         m_fAcceleration(10.0) {}
+         m_fAcceleration(5.0) {}
+         //m_fAcceleration(2.0500949e-2) {}
+         //m_fAcceleration(5.0500949e-4) {}
       
       ~CDynamics3DVirtualMagnetismPlugin() {}
       
@@ -46,11 +48,14 @@ namespace argos {
 
    private:
 
-
       CQTOpenGLWidget* m_pcWidget = nullptr;
       
       btScalar m_fAcceleration;
       std::vector<std::shared_ptr<CDynamics3DModel::CAbstractBody> > m_vecTargets;
+
+
+      static const std::array<btVector3, 8> m_arrMagnetOffsets;
+      static const std::array<btVector3, 6> m_arrAxis;
    };
    
    /****************************************/
